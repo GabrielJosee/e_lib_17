@@ -1,6 +1,9 @@
+import 'package:e_lib_17_jose/app/modules/book/views/book_view.dart';
+import 'package:e_lib_17_jose/app/modules/profile/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../routes/app_pages.dart';
+import '../../book/controllers/book_controller.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -8,14 +11,84 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _buildBody(),
-      bottomNavigationBar: _buildBottomNavigationBar(),
-    );
+    final BookController bookController = Get.put(BookController());
+    return HomeViewStful();
+  }
+}
+
+class HomeViewStful extends StatefulWidget {
+  @override
+  State<HomeViewStful> createState() => _HomeViewStfulState();
+}
+
+class _HomeViewStfulState extends State<HomeViewStful> {
+  int _currentPageIndex = 0;
+  PageController _pageController = PageController(initialPage: 0);
+
+  List<Widget> pageViewModel() {
+    return [
+      scr1(),
+      BookView(),
+      ProfileView(),
+    ];
   }
 
-  Widget _buildBody() {
-    return Expanded(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      extendBody: true,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: PageView(
+        physics: BouncingScrollPhysics(),
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPageIndex = index;
+          });
+        },
+        children: pageViewModel(),
+      ),
+      bottomNavigationBar: NavigationBar(
+        elevation: 0,
+        onDestinationSelected: (int index) {
+          setState(() {
+            _currentPageIndex = index;
+            _pageController.animateToPage(index,
+                duration: Duration(milliseconds: 500), curve: Curves.ease);
+          });
+        },
+        backgroundColor: Theme.of(context).colorScheme.background,
+        indicatorColor: Colors.transparent,
+        selectedIndex: _currentPageIndex,
+        destinations: <Widget>[
+          NavigationDestination(
+            selectedIcon: Icon(Icons.home, color: Colors.black),
+            icon: Icon(Icons.home_outlined),
+            label: 'Beranda',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.library_books, color: Colors.black),
+            icon: Icon(Icons.library_books),
+            label: 'Koleksi',
+          ),
+          NavigationDestination(
+            selectedIcon: Icon(Icons.person_2, color: Colors.black),
+            icon: Icon(Icons.person_2_outlined),
+            label: 'Profil',
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class scr1 extends StatelessWidget {
+  const scr1({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: ListView(
         children: [
           Padding(
@@ -164,45 +237,6 @@ class HomeView extends GetView<HomeController> {
         ],
       ),
     );
-  }
-
-  Widget _buildBottomNavigationBar() {
-    return Obx(
-          () => BottomNavigationBar(
-        currentIndex: controller.selectedIndex.value,
-        onTap: (index) {
-          _navigateToPage(index);
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books_sharp),
-            label: 'Koleksi',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _navigateToPage(int index) {
-    switch (index) {
-      case 0:
-        Get.offNamedUntil(Routes.HOME, (route) => false);
-        break;
-      case 1:
-        Get.offNamedUntil(Routes.REGISTER, (route) => false);
-        break;
-      case 2:
-        Get.offNamedUntil(Routes.REGISTER, (route) => false);
-        break;
-    }
   }
 }
 
