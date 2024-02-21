@@ -17,6 +17,12 @@ class RegisterController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final loading = false.obs;
   final count = 0.obs;
+  final passwordVisible = false.obs;
+
+
+  void togglePasswordVisibility() {
+    passwordVisible.value = !passwordVisible.value;
+  }
 
   @override
   void onInit() {
@@ -41,7 +47,7 @@ class RegisterController extends GetxController {
       if (formKey.currentState!.validate()) {
         final response = await ApiProvider.instance().post(Endpoint.register,
             data: {
-              "nama": usernameController.text.toString(),
+              "nama": namaController.text.toString(),
               "username": usernameController.text.toString(),
               "telp": telpController.text.toString(),
               "alamat": alamatController.text.toString(),
@@ -49,6 +55,7 @@ class RegisterController extends GetxController {
             });
         if (response.statusCode == 201) {
           await StorageProvider.write(StorageKey.status, "success");
+          Get.snackbar("Success", "Resgister Berhasil", backgroundColor: Colors.grey.shade300);
           Get.offAllNamed(Routes.LOGIN);
         } else {
           Get.snackbar("Sorry", "Login Gagal", backgroundColor: Colors.orange);

@@ -2,10 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../../routes/app_pages.dart';
-
 
 void main() => runApp(MyApp());
 
@@ -29,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 5), () {
-      Get.offNamedUntil(Routes.LOGIN, (route) => false);
+      Get.offNamed(Routes.LOGIN);
     });
   }
 

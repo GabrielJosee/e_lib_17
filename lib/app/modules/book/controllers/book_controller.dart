@@ -7,7 +7,6 @@ import '../../../data/provider/api_provider.dart';
 
 class BookController extends GetxController  with StateMixin<List<DataBook>>{
 
-
   final count = 0.obs;
   @override
   void onInit() {

@@ -16,6 +16,7 @@ class LoginController extends GetxController {
   final loading = false.obs;
   final passwordVisible = false.obs;
 
+
   void togglePasswordVisibility() {
     passwordVisible.value = !passwordVisible.value;
   }
@@ -47,7 +48,9 @@ class LoginController extends GetxController {
           await StorageProvider.write(StorageKey.status, "logged");
           await StorageProvider.write(
               StorageKey.idUser, responseLogin.data!.id!.toString());
+          await StorageProvider.write(StorageKey.username, responseLogin.data!.username!);
           Get.offAllNamed(Routes.HOME);
+          Get.snackbar("Success", "Login Berhasil", backgroundColor: Colors.grey.shade300);
         } else {
           Get.snackbar("Sorry", "Login Gagal", backgroundColor: Colors.orange);
         }

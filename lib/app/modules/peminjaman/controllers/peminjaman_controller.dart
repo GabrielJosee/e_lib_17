@@ -2,20 +2,17 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constant/endpoin.dart';
-import '../../../data/model/resoponse_book.dart';
+import '../../../data/model/response_pinjam.dart';
 import '../../../data/provider/api_provider.dart';
+import '../../../data/provider/storage_provider.dart';
 
-class HomeController extends GetxController with StateMixin<List<DataBook>> {
-  final Rx<int> selectedIndex = 0.obs;
-  var isLoading = true.obs;
+class PeminjamanController extends GetxController with StateMixin<List<DataPinjam>>{
+  //TODO: Implement PeminjamanController
+
   final count = 0.obs;
-
-  List<DataBook>? filteredBooks;
-
   @override
   void onInit() {
     super.onInit();
-    filteredBooks = [];
     getData();
   }
 
@@ -28,18 +25,16 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
   void onClose() {
     super.onClose();
   }
-
   getData() async {
     change(null, status: RxStatus.loading());
     try {
-      final response = await ApiProvider.instance().get(Endpoint.book);
+      final response = await ApiProvider.instance().get(Endpoint.pinjam + '/${StorageProvider.read(StorageKey.idUser)}');
       if (response.statusCode == 200) {
-        final ResoponseBook resoponseBook = ResoponseBook.fromJson(
-            response.data);
-        if (resoponseBook.data!.isEmpty) {
+        final ResponsePinjam responsePinjam = ResponsePinjam.fromJson(response.data);
+        if (responsePinjam.data!.isEmpty) {
           change(null, status: RxStatus.empty());
         } else {
-          change(resoponseBook.data, status: RxStatus.success());
+          change(responsePinjam.data, status: RxStatus.success());
         }
       } else {
         change(null, status: RxStatus.error("Gagal mengambil data"));
@@ -47,8 +42,8 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
     } on DioException catch (e) {
       if (e.response != null) {
         if (e.response?.data != null) {
-          change(
-              null, status: RxStatus.error("${e.response?.data['message']}"));
+          change(null,
+              status: RxStatus.error("${e.response?.data['message']}"));
         }
       } else {
         change(null, status: RxStatus.error(e.message ?? ""));
@@ -56,15 +51,5 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
     } catch (e) {
       change(null, status: RxStatus.error(e.toString()));
     }
-  }
-  void search(String query) {
-    if (query.isEmpty) {
-      filteredBooks = state;
-    } else {
-      filteredBooks = state?.where((book) {
-        return book.judul?.toLowerCase().contains(query.toLowerCase()) ?? false;
-      }).toList();
-    }
-    update();
   }
 }

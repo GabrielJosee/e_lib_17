@@ -1,7 +1,10 @@
-import 'package:e_lib_17_jose/app/modules/book/views/book_view.dart';
+
+import 'package:e_lib_17_jose/app/modules/peminjaman/controllers/peminjaman_controller.dart';
+import 'package:e_lib_17_jose/app/modules/peminjaman/views/peminjaman_view.dart';
 import 'package:e_lib_17_jose/app/modules/profile/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../data/model/resoponse_book.dart';
 import '../../../routes/app_pages.dart';
 import '../../book/controllers/book_controller.dart';
 import '../controllers/home_controller.dart';
@@ -12,6 +15,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final BookController bookController = Get.put(BookController());
+    final PeminjamanController peminjamanController = Get.put(PeminjamanController());
     return HomeViewStful();
   }
 }
@@ -28,7 +32,7 @@ class _HomeViewStfulState extends State<HomeViewStful> {
   List<Widget> pageViewModel() {
     return [
       scr1(),
-      BookView(),
+      PeminjamanView(),
       ProfileView(),
     ];
   }
@@ -83,7 +87,8 @@ class _HomeViewStfulState extends State<HomeViewStful> {
 }
 
 class scr1 extends StatelessWidget {
-  const scr1({Key? key}) : super(key: key);
+  final HomeController homeController = Get.put(HomeController());
+  final BookController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -101,14 +106,6 @@ class scr1 extends StatelessWidget {
                   'assets/logo_1.png',
                   width: 70,
                 ),
-                const Text(
-                  "Hallo, J",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 17,
-                    fontStyle: FontStyle.normal,
-                  ),
-                ),
                 InkWell(
                   onTap: () {
                     Get.toNamed(Routes.REGISTER);
@@ -121,34 +118,22 @@ class scr1 extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 2),
-                ),
-              ],
-            ),
-            child: TextField(
-              style: const TextStyle(color: Colors.black),
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.white,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide.none,
-                ),
-                hintText: "Cari Buku",
-                hintStyle: const TextStyle(color: Colors.grey),
-                prefixIcon: const Icon(Icons.search, color: Colors.black),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {
+                  showSearch(context: context, delegate: BookSearch(controller: controller));
+                },
+                icon: Icon(Icons.search),
               ),
-            ),
+              const Text(
+                "Cari Buku", style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+              ),
+            ],
           ),
           const SizedBox(height: 20.0),
           const Text(
@@ -163,155 +148,196 @@ class scr1 extends StatelessWidget {
             height: 8.0,
           ),
           Container(
-            height: 200,
-            child: PageView(
-              children: [
-                CustomMenu(
-                  imageAsset: "assets/logo_1.png",
-                  title: "Foto 1",
-                ),
-                CustomMenu(
-                  imageAsset: "assets/logo_1.png",
-                  title: "Foto 2",
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20.0),
-          const Text(
-            "Rekomendasi",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade200,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Get.toNamed(Routes.REGISTER);
-                      },
-                      child: CustomMenu2(
-                        imageAsset: "assets/logo_1.png",
-                        title: "Foto 1",
+            height: 300,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: homeController.obx(
+                    (state) => ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state!.length,
+                  itemBuilder: (context, index) {
+                    DataBook dataBook = state[index];
+                    return Container(
+                      width: 200,
+                      child: Card(
+                        child: Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${dataBook.judul}",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                "Penulis: ${dataBook.penulis}",
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              SizedBox(height: 8),
+                              InkWell(
+                                onTap: () => Get.toNamed(
+                                  Routes.ADD_PEMINJAMAN,
+                                  parameters: {
+                                    "id": (dataBook.id ?? 0).toString(),
+                                    'judul': dataBook.judul ?? '-',
+                                  },
+                                ),
+                                child: Container(
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.shopping_cart,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(width: 5),
+                                      Text(
+                                        "Pinjam",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  const VerticalDivider(color: Colors.grey, thickness: 1),
-                  Expanded(
-                    child: InkWell(
-                      onTap: () {
-                        Get.toNamed(Routes.REGISTER);
-                      },
-                      child: const CustomMenu2(
-                        imageAsset: "assets/logo_1.png",
-                        title: "Foto 2",
-                      ),
-                    ),
-                  ),
-                ],
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 10), // Atur jarak antara item
+                ),
+                onLoading: Center(child: const CircularProgressIndicator()),
               ),
             ),
-          ),
+          )
         ],
       ),
     );
   }
 }
+class BookSearch extends SearchDelegate<String> {
+  final BookController controller;
 
-class CustomMenu extends StatelessWidget {
-  final String imageAsset;
-  final String title;
-
-  const CustomMenu({
-    required this.imageAsset,
-    required this.title,
-  });
+  BookSearch({required this.controller});
 
   @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Get.toNamed(Routes.REGISTER);
-      },
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              imageAsset,
-              height: 80,
-              width: 250,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(height: 20),
-            Text(title,style: TextStyle(fontWeight: FontWeight.w900, fontSize: 15),),
-          ],
-        ),
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: Icon(Icons.clear),
       ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        close(context, '');
+      },
+      icon: Icon(Icons.arrow_back),
     );
   }
-}
-
-class CustomMenu2 extends StatelessWidget {
-  const CustomMenu2({
-    super.key,
-    required this.imageAsset,
-    required this.title,
-  });
-
-  final String imageAsset;
-  final String title;
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-        width: 200,
-        height: 300,
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-            color: Colors.white70,
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.asset(
-              imageAsset,
-              alignment: Alignment.center,
-              width: 200,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                title,
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+  Widget buildResults(BuildContext context) {
+    final List<DataBook> filteredBooks = controller.state?.where((book) {
+      return book.judul!.toLowerCase().contains(query.toLowerCase());
+    }).toList() ?? [];
+
+    return ListView.separated(
+      itemCount: filteredBooks.length,
+      itemBuilder: (context, index) {
+        DataBook dataBook = filteredBooks[index];
+        return Card(
+          elevation: 5,
+          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: ListTile(
+            title: Text(
+              "${dataBook.judul}",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ],
-        ));
+            subtitle: Text(
+              "Penulis ${dataBook.penulis}\n${dataBook.penerbit} - ${dataBook.tahunTerbit}",
+              style: TextStyle(fontSize: 14),
+            ),
+            trailing: InkWell(
+              onTap: () => Get.toNamed(
+                Routes.REGISTER,
+                parameters: {
+                  "id": (dataBook.id ?? 0).toString(),
+                  'judul': dataBook.judul ?? '-',
+                },
+              ),
+              child: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.shopping_cart,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      "Pinjam",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      separatorBuilder: (context, index) => Divider(),
+    );
+  }
+
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final List<DataBook> allBooks = controller.state ?? [];
+    final List<DataBook> suggestionList = query.isEmpty
+        ? allBooks
+        : allBooks.where((book) {
+      return book.judul!.toLowerCase().contains(query.toLowerCase());
+    }).toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        DataBook dataBook = suggestionList[index];
+        return ListTile(
+          title: Text(
+            "${dataBook.judul}",
+          ),
+          onTap: () {
+            query = dataBook.judul!;
+            showResults(context);
+          },
+        );
+      },
+    );
   }
 }

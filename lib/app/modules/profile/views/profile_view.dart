@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/profile_controller.dart';
@@ -9,20 +10,39 @@ class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final ProfileController profileController = Get.put(ProfileController());
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Expanded(
           child: ListView(
             children: [
-              Padding( padding : const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/logo_1.png' , width: 70,)
-                  ],
-                ),
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/logo_1.png', width: 70),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: FractionalOffset.center,
+                      child: Obx(() => Text(
+                        "Hallo, ${controller.username.value}",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      )),
+                    ),
+                  ),
+                ],
               ),
               Stack(
                   children: [
@@ -125,8 +145,9 @@ void showLogoutConfirmationDialog(BuildContext context) {
             child: const Text("Cancel"),
           ),
           TextButton(
-            onPressed: () {
-              Get.toNamed(Routes.LOGIN);
+            onPressed: () async {
+              await GetStorage().erase();
+              Navigator.pushNamedAndRemoveUntil(context, Routes.LOGIN, (route) => false);
             },
             style: TextButton.styleFrom(
               primary: Colors.white,
@@ -139,3 +160,5 @@ void showLogoutConfirmationDialog(BuildContext context) {
     },
   );
 }
+
+
