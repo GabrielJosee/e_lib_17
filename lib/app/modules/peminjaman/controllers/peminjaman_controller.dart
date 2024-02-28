@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constant/endpoin.dart';
@@ -6,10 +7,9 @@ import '../../../data/model/response_pinjam.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/provider/storage_provider.dart';
 
-class PeminjamanController extends GetxController with StateMixin<List<DataPinjam>>{
-  //TODO: Implement PeminjamanController
-
+class PeminjamanController extends GetxController with StateMixin<List<DataPinjam>> {
   final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -25,7 +25,12 @@ class PeminjamanController extends GetxController with StateMixin<List<DataPinja
   void onClose() {
     super.onClose();
   }
-  getData() async {
+
+  Future<void> refreshData() async {
+    getData(showSnackBar: true);
+  }
+
+  getData({bool showSnackBar = false}) async {
     change(null, status: RxStatus.loading());
     try {
       final response = await ApiProvider.instance().get(Endpoint.pinjam + '/${StorageProvider.read(StorageKey.idUser)}');
@@ -34,7 +39,12 @@ class PeminjamanController extends GetxController with StateMixin<List<DataPinja
         if (responsePinjam.data!.isEmpty) {
           change(null, status: RxStatus.empty());
         } else {
-          change(responsePinjam.data, status: RxStatus.success());
+          List<DataPinjam> existingData = state ?? [];
+          existingData.addAll(responsePinjam.data!);
+          change(existingData, status: RxStatus.success());
+          if (showSnackBar) {
+            Get.snackbar("Success", "Data telah diperbarui", backgroundColor: Colors.grey.shade300);
+          }
         }
       } else {
         change(null, status: RxStatus.error("Gagal mengambil data"));

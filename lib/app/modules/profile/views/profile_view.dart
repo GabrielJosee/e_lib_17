@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -8,89 +7,95 @@ import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final ProfileController profileController = Get.put(ProfileController());
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Expanded(
-          child: ListView(
+    return SafeArea(
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: 20),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/logo_1.png', width: 70),
-                      ],
-                    ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Image.asset('assets/logo_1.png', width: 70),
                   ),
                   Expanded(
                     child: Align(
-                      alignment: FractionalOffset.center,
-                      child: Obx(() => Text(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
                         "Hallo, ${controller.username.value}",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                           fontStyle: FontStyle.normal,
                         ),
-                      )),
+                      ),
                     ),
                   ),
                 ],
               ),
+              SizedBox(height: 20),
               Stack(
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 130,
-                        height: 130,
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 4, color: Colors.grey),
-                            boxShadow: [
-                              BoxShadow(
-                                  spreadRadius: 2,
-                                  blurRadius: 10,
-                                  color: Colors.black.withOpacity(0.1)
-                              ),
-                            ],
-                            shape: BoxShape.circle,
-                            image: const DecorationImage(
-                                fit: BoxFit.cover,
-                                image:
-                                AssetImage('assets/p.jpg')
-                            )
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    width: 130,
+                    height: 130,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 4, color: Colors.grey),
+                      boxShadow: [
+                        BoxShadow(
+                          spreadRadius: 2,
+                          blurRadius: 10,
+                          color: Colors.black.withOpacity(0.1),
                         ),
+                      ],
+                      shape: BoxShape.circle,
+                      image: const DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage('assets/p.jpg'),
                       ),
-                    )
-                  ]
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(horizontal: 150),
-                  child: RawMaterialButton(
-                    fillColor: Color(0xFF000000),
-                    elevation: 0.0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    onPressed: () {
-                      Get.toNamed(Routes.PROFILE);
-                    }, child: const Text("Edit Profile", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    ),
                   ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.black,
+                      ),
+                      child: IconButton(
+                        onPressed: () {
+                          // Add functionality for changing profile picture
+                        },
+                        icon: Icon(Icons.camera_alt, color: Colors.white),
+                      ),
+                    ),
                   ),
+                ],
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 ),
+                onPressed: () {
+                  Get.toNamed(Routes.PROFILE);
+                },
+                child: Text("Edit Profile"),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
               InkWell(
                 onTap: () {
                   showLogoutConfirmationDialog(context);
@@ -105,20 +110,14 @@ class ProfileView extends GetView<ProfileController> {
                     ),
                     child: const Icon(Icons.logout),
                   ),
-                  title: Text("Logout", style: Theme.of(context).textTheme.bodyText1,),
-                  trailing: Container(
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.grey.withOpacity(0.1),
-                    ),
-                    child: const Icon(Icons.chevron_right, size: 18, color: Colors.black,),
+                  title: Text(
+                    "Logout",
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
+                  trailing: Icon(Icons.chevron_right),
                 ),
               ),
             ],
-
           ),
         ),
       ),
@@ -160,5 +159,3 @@ void showLogoutConfirmationDialog(BuildContext context) {
     },
   );
 }
-
-

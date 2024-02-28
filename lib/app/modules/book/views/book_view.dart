@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../../data/model/resoponse_book.dart';
+import '../../../data/model/response_book.dart';
 import '../../../routes/app_pages.dart';
 import '../controllers/book_controller.dart';
 

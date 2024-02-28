@@ -1,14 +1,14 @@
 /// status : 200
 /// message : "success"
-/// data : [{"id":7,"kategori_id":1,"judul":"Anak Senja","penulis":"romli kusnadi","penerbit":"PT Damai Sejahtera","tahun_terbit":2023,"created_at":"2024-02-11T14:30:22.000000Z","updated_at":"2024-02-11T14:30:22.000000Z","kategori":{"id":1,"nama":"umum"}}]
+/// data : [{"id":15,"kategori_id":1,"judul":"Terbang","image":"Screenshot 2023-12-08 095818.png","penulis":"Bambang sumintarto","penerbit":"PT Damai Sejahtera","tahun_terbit":1999,"created_at":"2024-02-26T05:18:32.000000Z","updated_at":"2024-02-26T05:18:32.000000Z","kategori":{"id":1,"nama":"umum"}}]
 
-class ResoponseBook {
-  ResoponseBook({
+class ResponseBook {
+  ResponseBook({
       this.status, 
       this.message, 
       this.data,});
 
-  ResoponseBook.fromJson(dynamic json) {
+  ResponseBook.fromJson(dynamic json) {
     status = json['status'];
     message = json['message'];
     if (json['data'] != null) {
@@ -34,14 +34,15 @@ class ResoponseBook {
 
 }
 
-/// id : 7
+/// id : 15
 /// kategori_id : 1
-/// judul : "Anak Senja"
-/// penulis : "romli kusnadi"
+/// judul : "Terbang"
+/// image : "Screenshot 2023-12-08 095818.png"
+/// penulis : "Bambang sumintarto"
 /// penerbit : "PT Damai Sejahtera"
-/// tahun_terbit : 2023
-/// created_at : "2024-02-11T14:30:22.000000Z"
-/// updated_at : "2024-02-11T14:30:22.000000Z"
+/// tahun_terbit : 1999
+/// created_at : "2024-02-26T05:18:32.000000Z"
+/// updated_at : "2024-02-26T05:18:32.000000Z"
 /// kategori : {"id":1,"nama":"umum"}
 
 class DataBook {
@@ -49,6 +50,7 @@ class DataBook {
       this.id, 
       this.kategoriId, 
       this.judul, 
+      this.image, 
       this.penulis, 
       this.penerbit, 
       this.tahunTerbit, 
@@ -60,6 +62,7 @@ class DataBook {
     id = json['id'];
     kategoriId = json['kategori_id'];
     judul = json['judul'];
+    image = json['image'];
     penulis = json['penulis'];
     penerbit = json['penerbit'];
     tahunTerbit = json['tahun_terbit'];
@@ -70,6 +73,7 @@ class DataBook {
   int? id;
   int? kategoriId;
   String? judul;
+  String? image;
   String? penulis;
   String? penerbit;
   int? tahunTerbit;
@@ -82,6 +86,7 @@ class DataBook {
     map['id'] = id;
     map['kategori_id'] = kategoriId;
     map['judul'] = judul;
+    map['image'] = image;
     map['penulis'] = penulis;
     map['penerbit'] = penerbit;
     map['tahun_terbit'] = tahunTerbit;

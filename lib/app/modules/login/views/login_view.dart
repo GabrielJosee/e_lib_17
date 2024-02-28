@@ -39,13 +39,11 @@ class LoginView extends GetView<LoginController> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(
-                        height: 10.0,
-                      ),
+                      const SizedBox(height: 10.0),
                       TextFormField(
                         controller: controller.usernameController,
                         decoration: const InputDecoration(
-                          hintText: "Masukan Username",
+                          hintText: "Masukkan Username",
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -54,15 +52,13 @@ class LoginView extends GetView<LoginController> {
                           return null;
                         },
                       ),
-                      const SizedBox(
-                        height: 26.0,
-                      ),
+                      const SizedBox(height: 26.0),
                       Container(
                         child: Obx(() => TextFormField(
                           controller: controller.passswordController,
                           obscureText: !controller.passwordVisible.value,
                           decoration: InputDecoration(
-                            hintText: "Masukan Password",
+                            hintText: "Masukkan Password",
                             suffixIcon: IconButton(
                               icon: Icon(controller.passwordVisible.value
                                   ? Icons.visibility
@@ -81,9 +77,7 @@ class LoginView extends GetView<LoginController> {
                           },
                         )),
                       ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
+                      const SizedBox(height: 8.0),
                       Align(
                         alignment: Alignment.centerRight,
                         child: GestureDetector(
@@ -97,50 +91,70 @@ class LoginView extends GetView<LoginController> {
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 70.0,
-                      ),
+                      const SizedBox(height: 70.0),
                       Obx(
                             () => controller.loading.value
                             ? const Center(
                           child: CircularProgressIndicator(),
                         )
                             : Container(
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 120),
-                        child: RawMaterialButton(
-                          fillColor: const Color(0xFF000000),
-                          elevation: 0.0,
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                          onPressed: () {
-                            controller.login();
-                          },
-                          child: const Text("MASUK", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 100),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              controller.login();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.black,
+                              elevation: 0.0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                            ),
+                            child: const Padding(
+                              padding: EdgeInsets.symmetric(vertical: 15.0),
+                              child: Text(
+                                "MASUK",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
-                      ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
+                      const SizedBox(height: 15.0),
                       Container(
                         width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 120),
-                        child: RawMaterialButton(
-                          fillColor: const Color(0xFF000000),
-                          elevation: 0.0,
-                          padding: const EdgeInsets.symmetric(vertical: 15.0),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                        margin: const EdgeInsets.symmetric(horizontal: 100),
+                        child: ElevatedButton(
                           onPressed: () {
                             Get.toNamed(Routes.REGISTER);
                           },
-                          child: const Text("DAFTAR AKUN", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.black,
+                            elevation: 0.0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                          ),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 15.0),
+                            child: Text(
+                              "DAFTAR AKUN",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
                         ),
                       )
-
                     ],
                   ),
                 ),
+
               ],
             ),
           ),

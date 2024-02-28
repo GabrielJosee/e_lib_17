@@ -1,10 +1,9 @@
-
 import 'package:e_lib_17_jose/app/modules/peminjaman/controllers/peminjaman_controller.dart';
 import 'package:e_lib_17_jose/app/modules/peminjaman/views/peminjaman_view.dart';
 import 'package:e_lib_17_jose/app/modules/profile/views/profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../data/model/resoponse_book.dart';
+import '../../../data/model/response_book.dart';
 import '../../../routes/app_pages.dart';
 import '../../book/controllers/book_controller.dart';
 import '../controllers/home_controller.dart';
@@ -122,19 +121,42 @@ class scr1 extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              IconButton(
-                onPressed: () {
-                  showSearch(context: context, delegate: BookSearch(controller: controller));
-                },
-                icon: Icon(Icons.search),
-              ),
-              const Text(
-                "Cari Buku", style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    showSearch(context: context, delegate: BookSearch(controller: controller));
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // Menambahkan padding vertikal dan horizontal
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Cari Buku',
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 16), // Menambahkan fontSize
+                          ),
+                        ),
+                        Icon(Icons.search),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
+
           const SizedBox(height: 20.0),
           const Text(
             "Terbaru",
@@ -157,58 +179,99 @@ class scr1 extends StatelessWidget {
                   itemCount: state!.length,
                   itemBuilder: (context, index) {
                     DataBook dataBook = state[index];
-                    return Container(
-                      width: 200,
-                      child: Card(
-                        child: Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${dataBook.judul}",
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                "Penulis: ${dataBook.penulis}",
-                                style: TextStyle(fontSize: 14),
-                              ),
-                              SizedBox(height: 8),
-                              InkWell(
-                                onTap: () => Get.toNamed(
-                                  Routes.ADD_PEMINJAMAN,
-                                  parameters: {
-                                    "id": (dataBook.id ?? 0).toString(),
-                                    'judul': dataBook.judul ?? '-',
-                                  },
-                                ),
-                                child: Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.shopping_cart,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(width: 5),
-                                      Text(
-                                        "Pinjam",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ],
+                    return InkWell(
+                      onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+                      child: Container(
+                        width: 150,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Center(
+                                    child: Image.network(
+                                      dataBook.image!,
+                                      fit: BoxFit.cover, // Menyesuaikan gambar dengan container
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 8),
+                                Center(
+                                  child: Text(
+                                    "${dataBook.judul}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => SizedBox(width: 10), // Atur jarak antara item
+                ),
+                onLoading: Center(child: const CircularProgressIndicator()),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20.0),
+          const Text(
+            "Recommended",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          Container(
+            height: 300,
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: homeController.obx(
+                    (state) => ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state!.length,
+                  itemBuilder: (context, index) {
+                    DataBook dataBook = state[index];
+                    return InkWell(
+                      onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+                      child: Container(
+                        width: 150,
+                        child: Card(
+                          child: Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Center(
+                                    child: Image.network(
+                                      dataBook.image!,
+                                      fit: BoxFit.cover, // Menyesuaikan gambar dengan container
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Center(
+                                  child: Text(
+                                    "${dataBook.judul}",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -262,48 +325,51 @@ class BookSearch extends SearchDelegate<String> {
       itemCount: filteredBooks.length,
       itemBuilder: (context, index) {
         DataBook dataBook = filteredBooks[index];
-        return Card(
-          elevation: 5,
-          margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: ListTile(
-            title: Text(
-              "${dataBook.judul}",
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            subtitle: Text(
-              "Penulis ${dataBook.penulis}\n${dataBook.penerbit} - ${dataBook.tahunTerbit}",
-              style: TextStyle(fontSize: 14),
-            ),
-            trailing: InkWell(
-              onTap: () => Get.toNamed(
-                Routes.REGISTER,
-                parameters: {
-                  "id": (dataBook.id ?? 0).toString(),
-                  'judul': dataBook.judul ?? '-',
-                },
-              ),
-              child: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(5),
+        return InkWell(
+          onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+          child: Card(
+            elevation: 5,
+            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            child: ListTile(
+              title: Text(
+                "${dataBook.judul}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.shopping_cart,
-                      color: Colors.white,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Pinjam",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ],
+              ),
+              subtitle: Text(
+                "Penulis ${dataBook.penulis}\n${dataBook.penerbit} - ${dataBook.tahunTerbit}",
+                style: TextStyle(fontSize: 14),
+              ),
+              trailing: InkWell(
+                onTap: () => Get.toNamed(
+                  Routes.ADD_PEMINJAMAN,
+                  parameters: {
+                    "id": (dataBook.id ?? 0).toString(),
+                    'judul': dataBook.judul ?? '-',
+                  },
+                ),
+                child: Container(
+                  padding: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.shopping_cart,
+                        color: Colors.white,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        "Pinjam",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
