@@ -1,9 +1,9 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 import '../../../data/model/response_book.dart';
-import '../../../routes/app_pages.dart';
 import '../controllers/detail_peminjaman_controller.dart';
 
 class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
@@ -73,6 +73,43 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                               SizedBox(height: 8),
                               Text("Tahun Terbit : ${dataBook.tahunTerbit}"),
                             ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Title(
+                          color: Colors.black,
+                          child: Text(
+                            "Deskripsi Buku : ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 30,
+                              fontFamily: 'Nunito',
+                            ),
+                          ),
+                        ),
+                        ExpandableText(
+                          "${dataBook.deskripsi}",
+                          expandText: 'Show more ⬇️',
+                          collapseText: 'Show less ⬆️',
+                          maxLines: 5,
+                          linkColor: Colors.blue,
+                          linkStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
                           ),
                         ),
                       ],

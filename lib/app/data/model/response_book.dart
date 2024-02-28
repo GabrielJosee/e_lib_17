@@ -1,6 +1,6 @@
 /// status : 200
 /// message : "success"
-/// data : [{"id":15,"kategori_id":1,"judul":"Terbang","image":"Screenshot 2023-12-08 095818.png","penulis":"Bambang sumintarto","penerbit":"PT Damai Sejahtera","tahun_terbit":1999,"created_at":"2024-02-26T05:18:32.000000Z","updated_at":"2024-02-26T05:18:32.000000Z","kategori":{"id":1,"nama":"umum"}}]
+/// data : [{"id":40,"kategori_id":1,"judul":"Damai","image":"http://192.168.6.210:8000/images/Register.png","penulis":"Bambang sumintarto","penerbit":"PT Damai Sejahtera","tahun_terbit":1999,"deskripsi":"Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam non eos totam earum! Unde veniam possimus voluptas perferendis itaque maxime deserunt tenetur ut quo, adipisci ipsum culpa dolores reprehenderit assumenda vel aut tempore! Vero eius corr","created_at":"2024-02-27T16:08:56.000000Z","updated_at":"2024-02-27T16:08:56.000000Z","kategori":{"id":1,"nama":"umum"}}]
 
 class ResponseBook {
   ResponseBook({
@@ -34,15 +34,16 @@ class ResponseBook {
 
 }
 
-/// id : 15
+/// id : 40
 /// kategori_id : 1
-/// judul : "Terbang"
-/// image : "Screenshot 2023-12-08 095818.png"
+/// judul : "Damai"
+/// image : "http://192.168.6.210:8000/images/Register.png"
 /// penulis : "Bambang sumintarto"
 /// penerbit : "PT Damai Sejahtera"
 /// tahun_terbit : 1999
-/// created_at : "2024-02-26T05:18:32.000000Z"
-/// updated_at : "2024-02-26T05:18:32.000000Z"
+/// deskripsi : "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam non eos totam earum! Unde veniam possimus voluptas perferendis itaque maxime deserunt tenetur ut quo, adipisci ipsum culpa dolores reprehenderit assumenda vel aut tempore! Vero eius corr"
+/// created_at : "2024-02-27T16:08:56.000000Z"
+/// updated_at : "2024-02-27T16:08:56.000000Z"
 /// kategori : {"id":1,"nama":"umum"}
 
 class DataBook {
@@ -54,6 +55,7 @@ class DataBook {
       this.penulis, 
       this.penerbit, 
       this.tahunTerbit, 
+      this.deskripsi, 
       this.createdAt, 
       this.updatedAt, 
       this.kategori,});
@@ -66,6 +68,7 @@ class DataBook {
     penulis = json['penulis'];
     penerbit = json['penerbit'];
     tahunTerbit = json['tahun_terbit'];
+    deskripsi = json['deskripsi'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     kategori = json['kategori'] != null ? Kategori.fromJson(json['kategori']) : null;
@@ -77,6 +80,7 @@ class DataBook {
   String? penulis;
   String? penerbit;
   int? tahunTerbit;
+  String? deskripsi;
   String? createdAt;
   String? updatedAt;
   Kategori? kategori;
@@ -90,6 +94,7 @@ class DataBook {
     map['penulis'] = penulis;
     map['penerbit'] = penerbit;
     map['tahun_terbit'] = tahunTerbit;
+    map['deskripsi'] = deskripsi;
     map['created_at'] = createdAt;
     map['updated_at'] = updatedAt;
     if (kategori != null) {

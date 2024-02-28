@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../routes/app_pages.dart';
+import '../../home/views/home_view.dart';
 import '../controllers/profile_controller.dart';
 
 class ProfileView extends GetView<ProfileController> {
@@ -24,7 +25,15 @@ class ProfileView extends GetView<ProfileController> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Image.asset('assets/logo_1.png', width: 70),
+                    child:  GestureDetector(
+                      onTap: () {
+                        Get.to(() => HomeView());
+                      },
+                      child: Image.asset(
+                        'assets/logo_1.png',
+                        width: 70,
+                      ),
+                    ),
                   ),
                   Expanded(
                     child: Align(
@@ -91,7 +100,7 @@ class ProfileView extends GetView<ProfileController> {
                   foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 ),
                 onPressed: () {
-                  Get.toNamed(Routes.PROFILE);
+                  Get.toNamed(Routes.EDIT_PROFILE);
                 },
                 child: Text("Edit Profile"),
               ),

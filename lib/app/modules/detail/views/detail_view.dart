@@ -1,3 +1,4 @@
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -56,7 +57,7 @@ class DetailView extends GetView<DetailController> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 "Tentang Buku : ",
                                 style: TextStyle(
                                   fontWeight: FontWeight.w900,
@@ -72,9 +73,92 @@ class DetailView extends GetView<DetailController> {
                               Text("Penerbit : ${dataBook.penerbit}"),
                               SizedBox(height: 8),
                               Text("Tahun Terbit : ${dataBook.tahunTerbit}"),
+                              SizedBox(height: 16),
+                              const Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    "Rating: ",
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 20,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 20,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 20,
+                                  ),
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 20,
+                                  ),
+                                  Icon(
+                                    Icons.star_half,
+                                    color: Colors.yellow,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
+
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Title(
+                          color: Colors.black,
+                          child: Text(
+                            "Deskripsi Buku : ",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 30,
+                              fontFamily: 'Nunito',
+                            ),
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ExpandableText(
+                              "${dataBook.deskripsi}",
+                              expandText: 'Show more ⬇️',
+                              collapseText: 'Show less ⬆️',
+                              maxLines: 5,
+                              linkColor: Colors.blue,
+                              linkStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                          ],
+                        ),
+
                       ],
                     ),
                   ),

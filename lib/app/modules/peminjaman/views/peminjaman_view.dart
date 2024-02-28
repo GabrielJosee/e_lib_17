@@ -41,12 +41,6 @@ class PeminjamanView extends GetView<PeminjamanController> {
           onLoading: Center(child: CupertinoActivityIndicator()),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement logic for adding new items
-        },
-        child: Icon(Icons.add),
-      ),
     );
   }
 
