@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:e_lib_17_jose/app/modules/peminjaman/controllers/peminjaman_controller.dart';
 import 'package:e_lib_17_jose/app/modules/peminjaman/views/peminjaman_view.dart';
 import 'package:e_lib_17_jose/app/modules/profile/views/profile_view.dart';
@@ -91,7 +93,7 @@ class _HomeViewStfulState extends State<HomeViewStful> {
 }
 
 class Scr1 extends StatelessWidget {
-  final HomeController homeController = Get.put(HomeController());
+  final HomeController homeController = Get.find();
   final BookController controller = Get.find();
 
   @override
@@ -168,136 +170,230 @@ class Scr1 extends StatelessWidget {
           ),
 
           const SizedBox(height: 20.0),
-          const Text(
-            "Terbaru",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-          Container(
-            height: 300,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: homeController.obx(
-                    (state) => ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state!.length,
-                  itemBuilder: (context, index) {
-                    DataBook dataBook = state[index];
-                    return InkWell(
-                      onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
-                      child: Container(
-                        width: 150,
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Center(
-                                    child: Image.network(
-                                      dataBook.image!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Center(
-                                  child: Text(
-                                    "${dataBook.judul}",
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Terbaru",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
-                onLoading: const Center(child: CircularProgressIndicator()),
               ),
-            ),
-          ),
-          const SizedBox(height: 20.0),
-          const Text(
-            "Recommended",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(
-            height: 8.0,
-          ),
-          Container(
-            height: 300,
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: homeController.obx(
-                    (state) => ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state!.length,
-                  itemBuilder: (context, index) {
-                    DataBook dataBook = state[index];
-                    return InkWell(
-                      onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
-                      child: Container(
-                        width: 150,
-                        child: Card(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Center(
-                                    child: Image.network(
-                                      dataBook.image!,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
+              const SizedBox(height: 8.0),
+              Container(
+                height: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: homeController.obx(
+                        (state) {
+                      if (state == null || state.isEmpty) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+
+                      // Urutkan berdasarkan createdAt
+                      state.sort((a, b) {
+                        if (a.createdAt != null && b.createdAt != null) {
+                          return b.createdAt!.compareTo(a.createdAt!);
+                        } else {
+                          return 0;
+                        }
+                      });
+
+                      return ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.length,
+                        itemBuilder: (context, index) {
+                          DataBook dataBook = state[index];
+                          return InkWell(
+                            onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+                            child: Container(
+                              width: 150,
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                const SizedBox(height: 8),
-                                Center(
-                                  child: Text(
-                                    "${dataBook.judul}",
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            spreadRadius: 2,
+                                            blurRadius: 5,
+                                            offset: const Offset(0, 3), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                          dataBook.image!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${dataBook.judul}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "Penulis: ${dataBook.penulis}",
+                                            style: const TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                  separatorBuilder: (context, index) => SizedBox(width: 10),
+                          );
+                        },
+                        separatorBuilder: (context, index) => const SizedBox(width: 10),
+                      );
+                    },
+                    onLoading: const Center(child: CircularProgressIndicator()),
+                  ),
                 ),
-                onLoading: const Center(child: CircularProgressIndicator()),
               ),
-            ),
-          )
+              const SizedBox(height: 20.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Recommended",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Container(
+                    height: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: homeController.obx(
+                            (state) {
+                          if (state == null || state.isEmpty) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+
+                          // Acak urutan data
+                          List<DataBook> randomBooks = List.of(state);
+                          randomBooks.shuffle();
+
+                          return ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: randomBooks.length,
+                            itemBuilder: (context, index) {
+                              DataBook dataBook = randomBooks[index];
+                              return InkWell(
+                                onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+                                child: Container(
+                                  width: 150,
+                                  child: Card(
+                                    elevation: 4,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 200,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 5,
+                                                offset: const Offset(0, 3), // changes position of shadow
+                                              ),
+                                            ],
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10),
+                                            child: Image.network(
+                                              dataBook.image ?? '', // Handle null image
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${dataBook.judul}",
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                "Penulis: ${dataBook.penulis ?? 'Unknown'}", // Handle null author
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) => const SizedBox(width: 10),
+                          );
+                        },
+                        onLoading: const Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ],
       ),
     );
   }
 }
+
 class BookSearch extends SearchDelegate<String> {
   final BookController controller;
 
@@ -331,62 +427,83 @@ class BookSearch extends SearchDelegate<String> {
       return book.judul!.toLowerCase().contains(query.toLowerCase());
     }).toList() ?? [];
 
-    return ListView.separated(
-      itemCount: filteredBooks.length,
-      itemBuilder: (context, index) {
-        DataBook dataBook = filteredBooks[index];
-        return InkWell(
-          onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
-          child: Card(
-            elevation: 5,
-            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: ListTile(
-              title: Text(
-                "${dataBook.judul}",
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                "Penulis ${dataBook.penulis}\n${dataBook.penerbit} - ${dataBook.tahunTerbit}",
-                style: const TextStyle(fontSize: 14),
-              ),
-              trailing: InkWell(
-                onTap: () => Get.toNamed(
-                  Routes.ADD_PEMINJAMAN,
-                  parameters: {
-                    "id": (dataBook.id ?? 0).toString(),
-                    'judul': dataBook.judul ?? '-',
-                  },
-                ),
+    if (filteredBooks.isEmpty) {
+      return Center(
+        child: Text(
+          "Tidak ada hasil yang ditemukan.",
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
+
+    return Container(
+      height: 300,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Center( // Widget Center untuk membuat hasil di tengah
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: filteredBooks.length,
+            itemBuilder: (context, index) {
+              DataBook dataBook = filteredBooks[index];
+              return InkWell(
+                onTap: () {
+                  Get.toNamed('/detail?id=${dataBook.id ?? 0}');
+                },
                 child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.shopping_cart,
-                        color: Colors.white,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        "Pinjam",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
+                  width: MediaQuery.of(context).size.width * 0.7, // Lebar card
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20), // Bentuk bulatan pada sudut
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          child: Image.network(
+                            dataBook.image!,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(20), // Agar gambar terpotong sesuai sudut card
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${dataBook.judul}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Penulis: ${dataBook.penulis}",
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
-        );
-      },
-      separatorBuilder: (context, index) => Divider(),
+        ),
+      ),
     );
   }
 
@@ -405,6 +522,17 @@ class BookSearch extends SearchDelegate<String> {
       itemBuilder: (context, index) {
         DataBook dataBook = suggestionList[index];
         return ListTile(
+          leading: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(dataBook.image ?? ''), // Gambar dari URL
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
           title: Text(
             "${dataBook.judul}",
           ),
@@ -417,5 +545,6 @@ class BookSearch extends SearchDelegate<String> {
     );
   }
 }
+
 
 

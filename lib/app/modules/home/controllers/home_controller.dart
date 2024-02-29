@@ -77,8 +77,4 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
     update();
   }
 
-  // Method to refresh data
-  void refreshData() {
-    getData();
-  }
 }
