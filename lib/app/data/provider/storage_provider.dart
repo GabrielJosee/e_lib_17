@@ -27,4 +27,6 @@ class StorageKey {
   static const String idUser = "idUser";
   static const String username = "username";
   static const String idBuku = "idBuku";
+  static const String idUlasan = "idUlasan";
+
 }

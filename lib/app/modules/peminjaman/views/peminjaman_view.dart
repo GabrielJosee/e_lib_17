@@ -32,28 +32,36 @@ class PeminjamanView extends GetView<PeminjamanController> {
         },
         child: controller.obx(
               (state) {
-            if (state != null && state.isNotEmpty) {
-              return ListView.builder(
-                itemCount: state.length,
-                itemBuilder: (context, index) {
-                  DataPinjam dataPinjam = state[index];
-                  return _buildPinjamItem(dataPinjam);
-                },
-              );
+            if (state != null) {
+              if (state.isEmpty) {
+                // Menampilkan pesan jika data kosong
+                return Center(
+                  child: Text(
+                    "Tidak ada data pinjaman",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                );
+              } else {
+                // Memperbarui tampilan jika ada data
+                return ListView.builder(
+                  itemCount: state.length,
+                  itemBuilder: (context, index) {
+                    DataPinjam dataPinjam = state[index];
+                    return _buildPinjamItem(dataPinjam);
+                  },
+                );
+              }
             } else {
-              return Center(
-                child: Text(
-                  "Tidak ada data pinjaman",
-                  style: TextStyle(fontSize: 16),
-                ),
-              );
+              // Menampilkan indikator loading ketika data masih dimuat
+              return Center(child: CircularProgressIndicator());
             }
           },
-          onLoading: Center(child: CupertinoActivityIndicator()),
+          onLoading: Center(child: CircularProgressIndicator()),
         ),
       ),
     );
   }
+
 
   Widget _buildPinjamItem(DataPinjam dataPinjam) {
     return Card(

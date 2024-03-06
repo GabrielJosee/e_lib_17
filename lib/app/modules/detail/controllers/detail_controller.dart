@@ -53,5 +53,4 @@ class DetailController extends GetxController with StateMixin<List<DataBook>>{
       change(null, status: RxStatus.error(e.toString()));
     }
     }
-
 }

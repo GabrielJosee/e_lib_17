@@ -27,7 +27,7 @@ class ProfileView extends GetView<ProfileController> {
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child:  GestureDetector(
                       onTap: () {
-                        Get.to(() => HomeView());
+                        Get.offAllNamed(Routes.HOME);
                       },
                       child: Image.asset(
                         'assets/logo_1.png',

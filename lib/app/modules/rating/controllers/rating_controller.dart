@@ -1,20 +1,19 @@
 import 'package:dio/dio.dart';
+import 'package:e_lib_17_jose/app/data/model/response_ratings.dart';
 import 'package:get/get.dart';
 
 import '../../../data/constant/endpoin.dart';
-import '../../../data/model/response_book.dart';
 import '../../../data/provider/api_provider.dart';
 import '../../../data/provider/storage_provider.dart';
 
-class DetailPeminjamanController extends GetxController with StateMixin<List<DataBook>>{
-  //TODO: Implement DetailPeminjamanController
+class RatingController extends GetxController with StateMixin<List<DataRating>>{
+  //TODO: Implement RatingController
 
   final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
-    getDetailBuku();
-
+    getUlasan();
   }
 
   @override
@@ -26,16 +25,16 @@ class DetailPeminjamanController extends GetxController with StateMixin<List<Dat
   void onClose() {
     super.onClose();
   }
-  getDetailBuku() async {
+  getUlasan() async {
     change(null, status: RxStatus.loading());
     try {
-      final response = await ApiProvider.instance().get(Endpoint.book+"/${StorageProvider.read(StorageKey.idBuku)}" );
+      final response = await ApiProvider.instance().get(Endpoint.ulasan+"/${StorageProvider.read(StorageKey.idUlasan)}" );
       if (response.statusCode == 200) {
-        final ResponseBook responseBook = ResponseBook.fromJson(response.data);
-        if (responseBook.data!.isEmpty) {
+        final ResponseRatings responseRatings = ResponseRatings.fromJson(response.data);
+        if (responseRatings.data!.isEmpty) {
           change(null, status: RxStatus.empty());
         } else {
-          change(responseBook.data, status: RxStatus.success());
+          change(responseRatings.data, status: RxStatus.success());
         }
       } else {
         change(null, status: RxStatus.error("Gagal mengambil data"));
@@ -53,4 +52,5 @@ class DetailPeminjamanController extends GetxController with StateMixin<List<Dat
       change(null, status: RxStatus.error(e.toString()));
     }
   }
+  void increment() => count.value++;
 }

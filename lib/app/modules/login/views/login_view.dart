@@ -61,8 +61,7 @@ class LoginView extends GetView<LoginController> {
                           suffixIcon: IconButton(
                             icon: Icon(controller.passwordVisible.value
                                 ? Icons.visibility
-                                : Icons.visibility_off,
-                                color: Colors.black),
+                                : Icons.visibility_off),
                             onPressed: () {
                               controller.togglePasswordVisibility();
                             },
@@ -81,15 +80,20 @@ class LoginView extends GetView<LoginController> {
                       alignment: Alignment.centerRight,
                       child: GestureDetector(
                         onTap: () {
-                          Get.toNamed(Routes.REGISTER);
+                          Get.toNamed(Routes.LOGIN);
                         },
-                        child: const Text(
-                          "Lupa Password?",
-                          style: TextStyle(color: Colors.blue),
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: const Text(
+                            "Lupa Password?",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 70.0),
                     Obx(
                           () => controller.loading.value
@@ -104,7 +108,7 @@ class LoginView extends GetView<LoginController> {
                             controller.login();
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.black,
+                            backgroundColor: Colors.black,
                             elevation: 0.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -132,7 +136,7 @@ class LoginView extends GetView<LoginController> {
                           Get.toNamed(Routes.REGISTER);
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.black,
+                          backgroundColor: Colors.black,
                           elevation: 0.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),

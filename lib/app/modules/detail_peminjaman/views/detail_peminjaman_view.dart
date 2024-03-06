@@ -8,6 +8,7 @@ import '../controllers/detail_peminjaman_controller.dart';
 
 class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
   const DetailPeminjamanView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final id = Get.parameters['id'];
@@ -44,10 +45,14 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Image.network(
-                            dataBook.image!,
-                            height: 200,
-                            fit: BoxFit.cover,
+                          child: Flexible(
+                            child: AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Image.network(
+                                dataBook.image!,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(width: 16),
@@ -80,42 +85,47 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Title(
-                          color: Colors.black,
-                          child: Text(
-                            "Deskripsi Buku : ",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 30,
-                              fontFamily: 'Nunito',
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => Container(
+                      width: constraints.maxWidth,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Color(0xFFD9D9D9),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Deskripsi Buku : ',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                ExpandableText(
+                                  text: "${dataBook?.deskripsi}",
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        ExpandableText(
-                          "${dataBook.deskripsi}",
-                          expandText: 'Show more ⬇️',
-                          collapseText: 'Show less ⬆️',
-                          maxLines: 5,
-                          linkColor: Colors.blue,
-                          linkStyle: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
+
                 SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
@@ -194,5 +204,71 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
         ),
       );
     }
+  }
+}
+
+class ExpandableText extends StatefulWidget {
+  final String text;
+  final int maxLines;
+
+  ExpandableText({
+    required this.text,
+    this.maxLines = 4,
+  });
+
+  @override
+  _ExpandableTextState createState() => _ExpandableTextState();
+}
+
+class _ExpandableTextState extends State<ExpandableText> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 300),
+          crossFadeState: _isExpanded
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstChild: Text(
+            widget.text,
+            maxLines: widget.maxLines,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 14,
+            ),
+          ),
+          secondChild: Text(
+            widget.text,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        SizedBox(height: 6),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Text(
+            _isExpanded ? 'Show Less' : 'Show More',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

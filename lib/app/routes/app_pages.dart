@@ -18,6 +18,8 @@ import '../modules/peminjaman/bindings/peminjaman_binding.dart';
 import '../modules/peminjaman/views/peminjaman_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
+import '../modules/rating/bindings/rating_binding.dart';
+import '../modules/rating/views/rating_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
@@ -85,6 +87,11 @@ class AppPages {
       name: _Paths.EDIT_PROFILE,
       page: () => const EditProfileView(),
       binding: EditProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.RATING,
+      page: () => const RatingView(),
+      binding: RatingBinding(),
     ),
   ];
 }

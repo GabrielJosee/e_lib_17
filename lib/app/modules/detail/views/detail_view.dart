@@ -1,4 +1,3 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -75,42 +74,26 @@ class DetailView extends GetView<DetailController> {
                               Text("Tahun Terbit : ${dataBook.tahunTerbit}"),
                               SizedBox(height: 16),
                               const Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Rating: ",
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
                                   Icon(
                                     Icons.star,
                                     color: Colors.yellow,
-                                    size: 20,
+                                    size: 15,
                                   ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 20,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 20,
-                                  ),
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 20,
-                                  ),
-                                  Icon(
-                                    Icons.star_half,
-                                    color: Colors.yellow,
-                                    size: 20,
-                                  ),
+                                  // Text(
+                                  //   '${Get.parameters['rating']}',
+                                  //   style: TextStyle(
+                                  //       fontWeight: FontWeight.w800,
+                                  //       fontSize: 12,
+                                  //       color: Theme.of(context)
+                                  //           .colorScheme
+                                  //           .primary),
+                                  // ),
                                 ],
                               ),
+
                             ],
                           ),
                         ),
@@ -120,46 +103,43 @@ class DetailView extends GetView<DetailController> {
                   ),
                 ),
                 SizedBox(height: 20),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Title(
-                          color: Colors.black,
-                          child: Text(
-                            "Deskripsi Buku : ",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 30,
-                              fontFamily: 'Nunito',
+                Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) => Container(
+                      width: constraints.maxWidth,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(5.0),
+                        border: Border.all(
+                          color: Color(0xFFD9D9D9),
+                          width: 1,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Deskripsi Buku : ',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10),
+                                ExpandableText(
+                                  text: "${dataBook?.deskripsi}",
+                                ),
+                              ],
                             ),
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ExpandableText(
-                              "${dataBook.deskripsi}",
-                              expandText: 'Show more ⬇️',
-                              collapseText: 'Show less ⬆️',
-                              maxLines: 5,
-                              linkColor: Colors.blue,
-                              linkStyle: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                          ],
-                        ),
-
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -231,5 +211,70 @@ class DetailView extends GetView<DetailController> {
         ),
       );
     }
+  }
+}
+class ExpandableText extends StatefulWidget {
+  final String text;
+  final int maxLines;
+
+  ExpandableText({
+    required this.text,
+    this.maxLines = 4,
+  });
+
+  @override
+  _ExpandableTextState createState() => _ExpandableTextState();
+}
+
+class _ExpandableTextState extends State<ExpandableText> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedCrossFade(
+          duration: const Duration(milliseconds: 300),
+          crossFadeState: _isExpanded
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          firstChild: Text(
+            widget.text,
+            maxLines: widget.maxLines,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 14,
+            ),
+          ),
+          secondChild: Text(
+            widget.text,
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        SizedBox(height: 6),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
+          child: Text(
+            _isExpanded ? 'Show Less' : 'Show More',
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

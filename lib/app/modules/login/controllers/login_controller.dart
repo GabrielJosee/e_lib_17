@@ -31,26 +31,61 @@ class LoginController extends GetxController {
       Get.offAllNamed(Routes.HOME);
     }
   }
-    login() async {
+  login() async {
     loading(true);
     try {
       FocusScope.of(Get.context!).unfocus(); // Menutup keyboard
       formKey.currentState?.save();
       if (formKey.currentState!.validate()) {
-        final response = await ApiProvider.instance().post(Endpoint.login,
-            data: dio.FormData.fromMap({
-              "username": usernameController.text.toString(),
-              "password": passswordController.text.toString()
-            }));
+        final response = await ApiProvider.instance().post(
+          Endpoint.login,
+          data: dio.FormData.fromMap({
+            "username": usernameController.text.toString(),
+            "password": passswordController.text.toString(),
+          }),
+        );
         if (response.statusCode == 200) {
-          final ResponseLogin responseLogin =
-          ResponseLogin.fromJson(response.data);
+          final ResponseLogin responseLogin = ResponseLogin.fromJson(response.data);
           await StorageProvider.write(StorageKey.status, "logged");
-          await StorageProvider.write(
-              StorageKey.idUser, responseLogin.data!.id!.toString());
+          await StorageProvider.write(StorageKey.idUser, responseLogin.data!.id!.toString());
           await StorageProvider.write(StorageKey.username, responseLogin.data!.username!);
-          Get.offAllNamed(Routes.HOME);
-          Get.snackbar("Success", "Login Berhasil", backgroundColor: Colors.grey.shade300);
+
+          Get.dialog(
+            Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              backgroundColor: Colors.transparent,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                padding: const EdgeInsets.all(20.0),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.check_circle, color: Colors.green, size: 50),
+                    SizedBox(height: 20),
+                    Text(
+                      "Login Berhasil",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+
+
+          Future.delayed(const Duration(seconds: 2), () {
+            Get.back();
+            Get.offAllNamed(Routes.HOME);
+          });
         } else {
           Get.snackbar("Sorry", "Login Gagal", backgroundColor: Colors.orange);
         }
@@ -60,8 +95,7 @@ class LoginController extends GetxController {
       loading(false);
       if (e.response != null) {
         if (e.response?.data != null) {
-          Get.snackbar("Sorry", "${e.response?.data['message']}",
-              backgroundColor: Colors.orange);
+          Get.snackbar("Sorry", "${e.response?.data['message']}", backgroundColor: Colors.orange);
         }
       } else {
         Get.snackbar("Sorry", e.message ?? "", backgroundColor: Colors.red);
@@ -71,4 +105,5 @@ class LoginController extends GetxController {
       Get.snackbar("Error", e.toString(), backgroundColor: Colors.red);
     }
   }
+
 }
