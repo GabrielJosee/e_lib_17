@@ -1,5 +1,5 @@
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:e_lib_17_jose/app/modules/peminjaman/controllers/peminjaman_controller.dart';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,49 +8,76 @@ import '../controllers/add_peminjaman_controller.dart';
 
 class AddPeminjamanView extends GetView<AddPeminjamanController> {
   const AddPeminjamanView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final AddPeminjamanController addPeminjamanController = Get.put(AddPeminjamanController());
+    Get.put(AddPeminjamanController());
     return Scaffold(
       appBar: AppBar(
-        title: Text('${Get.parameters['judul'] ?? ''}'),
+        title: Text("Peminjaman Buku"),
         centerTitle: true,
       ),
       body: Center(
         child: Form(
           key: controller.formKey,
-          child: Column(
+          child: Stack(
+            alignment: Alignment.center,
             children: [
-              Text(
-                "Buku yang dipinjam: ${Get.parameters['judul'] ?? ''}",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (Get.parameters['image'] != null)
+                Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Stack(
+                      children: [
+                        Image.network(
+                          Get.parameters['image'] ?? '',
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned.fill(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Colors.black.withOpacity(0.2),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              SizedBox(height: 20),
+              Center(
+                child: Text(
+                  "${Get.parameters['judul'] ?? ''}",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 20),
-              if (Get.parameters['image'] != null)
-                Image.network(
-                  Get.parameters['image'] ?? '', // Menggunakan 'image' dari parameter
-                  height: 200, // Atur tinggi gambar sesuai kebutuhan
-                  loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                              : null,
-                        ),
-                      );
-                    }
-                  },
-                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
-                    return Text('Failed to load image'); // Widget yang ditampilkan jika gagal memuat gambar
-                  },
-                ),
-
               SizedBox(height: 20),
               DateTimePicker(
                 icon: Icon(Icons.date_range_rounded),
@@ -82,32 +109,35 @@ class AddPeminjamanView extends GetView<AddPeminjamanController> {
                 onSaved: (val) => print(val),
               ),
               SizedBox(height: 20),
-              Obx(() => controller.loading.value
-                  ? CircularProgressIndicator()
-                  : ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  textStyle: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                onPressed: () {
-                  controller.add_pinjam();
-                },
-                child: Text(
-                  "Pinjam",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+              Obx(
+                () => controller.loading.value
+                    ? CircularProgressIndicator()
+                    : ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          textStyle: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        onPressed: () {
+                          controller.add_pinjam();
+                        },
+                        child: Text(
+                          "Pinjam",
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
               ),
             ],
           ),
+          ]
         ),
       ),
+      )
     );
   }
 }

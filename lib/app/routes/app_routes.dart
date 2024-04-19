@@ -14,6 +14,7 @@ abstract class Routes {
   static const DETAIL_PEMINJAMAN = _Paths.DETAIL_PEMINJAMAN;
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
   static const RATING = _Paths.RATING;
+  static const USER = _Paths.USER;
 }
 
 abstract class _Paths {
@@ -30,4 +31,5 @@ abstract class _Paths {
   static const DETAIL_PEMINJAMAN = '/detail-peminjaman';
   static const EDIT_PROFILE = '/edit-profile';
   static const RATING = '/rating';
+  static const USER = '/user';
 }

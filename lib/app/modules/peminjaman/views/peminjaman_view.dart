@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,18 +30,28 @@ class PeminjamanView extends GetView<PeminjamanController> {
           await controller.refreshData();
         },
         child: controller.obx(
-              (state) {
+          (state) {
             if (state != null) {
-              if (state.isEmpty) {
-                // Menampilkan pesan jika data kosong
+              if (!controller.loading.value && state.isEmpty) {
                 return Center(
-                  child: Text(
-                    "Tidak ada data pinjaman",
-                    style: TextStyle(fontSize: 16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Anda sedang tidak meminjam buku",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () async {
+                          await controller.refreshData();
+                        },
+                        child: const Text("Refresh"),
+                      ),
+                    ],
                   ),
                 );
               } else {
-                // Memperbarui tampilan jika ada data
                 return ListView.builder(
                   itemCount: state.length,
                   itemBuilder: (context, index) {
@@ -53,25 +62,25 @@ class PeminjamanView extends GetView<PeminjamanController> {
               }
             } else {
               // Menampilkan indikator loading ketika data masih dimuat
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
           },
-          onLoading: Center(child: CircularProgressIndicator()),
+          onLoading: const Center(child: CircularProgressIndicator()),
         ),
       ),
     );
   }
 
-
   Widget _buildPinjamItem(DataPinjam dataPinjam) {
     return Card(
       elevation: 5,
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () => Get.toNamed('/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
+        onTap: () =>
+            Get.toNamed('/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -81,38 +90,39 @@ class PeminjamanView extends GetView<PeminjamanController> {
                 children: [
                   // Tambahkan gambar di sini jika tersedia
                   // Misalnya: Image.asset('assets/images/book_cover.png', width: 80, height: 120),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "${dataPinjam.book?.judul}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           "Tanggal Pinjam: ${dataPinjam.tanggalPinjam}",
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           "Tanggal Pengembalian: ${dataPinjam.tanggalKembali}",
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     colors: [Colors.blue, Colors.purple],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
@@ -120,11 +130,12 @@ class PeminjamanView extends GetView<PeminjamanController> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: InkWell(
-                  onTap: () => Get.toNamed('/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
+                  onTap: () => Get.toNamed(
+                      '/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
                   child: Center(
                     child: Text(
                       "${dataPinjam.status}",
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
@@ -139,6 +150,7 @@ class PeminjamanView extends GetView<PeminjamanController> {
 
 class PeminjamanSearch extends SearchDelegate<String> {
   final PeminjamanController controller;
+  List<DataPinjam> searchResults = [];
 
   PeminjamanSearch({required this.controller});
 
@@ -148,11 +160,13 @@ class PeminjamanSearch extends SearchDelegate<String> {
       IconButton(
         onPressed: () {
           query = '';
+          searchResults.clear();
         },
         icon: const Icon(Icons.clear),
       ),
     ];
   }
+
 
   @override
   Widget buildLeading(BuildContext context) {
@@ -166,12 +180,17 @@ class PeminjamanSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final List<DataPinjam> filteredPeminjaman = controller.state?.where((peminjaman) {
-      return peminjaman.book?.judul!.toLowerCase().contains(query.toLowerCase()) ?? false;
-    }).toList() ?? [];
+    final List<DataPinjam> filteredPeminjaman =
+        controller.state?.where((peminjaman) {
+              return peminjaman.book?.judul!
+                      .toLowerCase()
+                      .contains(query.toLowerCase()) ??
+                  false;
+            }).toList() ??
+            [];
 
     if (filteredPeminjaman.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           "Tidak ada hasil yang ditemukan.",
           style: TextStyle(fontSize: 16),
@@ -194,8 +213,11 @@ class PeminjamanSearch extends SearchDelegate<String> {
     final List<DataPinjam> suggestionList = query.isEmpty
         ? borrowedBooks
         : borrowedBooks.where((peminjaman) {
-      return peminjaman.book?.judul!.toLowerCase().contains(query.toLowerCase()) ?? false;
-    }).toList();
+            return peminjaman.book?.judul!
+                    .toLowerCase()
+                    .contains(query.toLowerCase()) ??
+                false;
+          }).toList();
 
     return ListView.builder(
       itemCount: suggestionList.length,
@@ -214,16 +236,16 @@ class PeminjamanSearch extends SearchDelegate<String> {
     );
   }
 
-
   Widget _buildPinjamItem(BuildContext context, DataPinjam dataPinjam) {
     return Card(
       elevation: 5,
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: InkWell(
-        onTap: () => Get.toNamed('/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
+        onTap: () =>
+            Get.toNamed('/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -233,38 +255,39 @@ class PeminjamanSearch extends SearchDelegate<String> {
                 children: [
                   // Tambahkan gambar di sini jika tersedia
                   // Misalnya: Image.asset('assets/images/book_cover.png', width: 80, height: 120),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           "${dataPinjam.book?.judul}",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           "Tanggal Pinjam: ${dataPinjam.tanggalPinjam}",
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
-                        SizedBox(height: 4),
+                        const SizedBox(height: 4),
                         Text(
                           "Tanggal Pengembalian: ${dataPinjam.tanggalKembali}",
-                          style: TextStyle(fontSize: 14),
+                          style: const TextStyle(fontSize: 14),
                         ),
                       ],
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  gradient: const LinearGradient(
                     colors: [Colors.blue, Colors.purple],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
@@ -272,11 +295,12 @@ class PeminjamanSearch extends SearchDelegate<String> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: InkWell(
-                  onTap: () => Get.toNamed('/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
+                  onTap: () => Get.toNamed(
+                      '/detail-peminjaman?id=${dataPinjam.book?.id ?? 0}'),
                   child: Center(
                     child: Text(
                       "${dataPinjam.status}",
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
@@ -288,8 +312,3 @@ class PeminjamanSearch extends SearchDelegate<String> {
     );
   }
 }
-
-
-
-
-

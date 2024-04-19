@@ -9,6 +9,7 @@ import '../../../data/provider/storage_provider.dart';
 
 class PeminjamanController extends GetxController with StateMixin<List<DataPinjam>> {
   final count = 0.obs;
+  var loading = false.obs; // Tambahkan variabel loading
 
   @override
   void onInit() {
@@ -31,6 +32,7 @@ class PeminjamanController extends GetxController with StateMixin<List<DataPinja
   }
 
   getData({bool showSnackBar = false}) async {
+    loading.value = true; // Set loading true saat mengambil data
     change(null, status: RxStatus.loading());
     try {
       final response = await ApiProvider.instance().get(Endpoint.pinjam + '/${StorageProvider.read(StorageKey.idUser)}');
@@ -60,6 +62,8 @@ class PeminjamanController extends GetxController with StateMixin<List<DataPinja
       }
     } catch (e) {
       change(null, status: RxStatus.error(e.toString()));
+    } finally {
+      loading.value = false; // Set loading false setelah selesai mengambil data
     }
   }
 }

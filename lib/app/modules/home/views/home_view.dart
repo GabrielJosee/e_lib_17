@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:e_lib_17_jose/app/modules/peminjaman/controllers/peminjaman_controller.dart';
 import 'package:e_lib_17_jose/app/modules/peminjaman/views/peminjaman_view.dart';
 import 'package:e_lib_17_jose/app/modules/profile/views/profile_view.dart';
@@ -16,7 +14,8 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final BookController bookController = Get.put(BookController());
-    final PeminjamanController peminjamanController = Get.put(PeminjamanController());
+    final PeminjamanController peminjamanController =
+        Get.put(PeminjamanController());
     return HomeViewStful();
   }
 }
@@ -32,61 +31,64 @@ class _HomeViewStfulState extends State<HomeViewStful> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: PageView.builder(
-        physics: const BouncingScrollPhysics(),
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _currentPageIndex = index;
-          });
-        },
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          switch (index) {
-            case 0:
-              return Scr1();
-            case 1:
-              return const PeminjamanView();
-            case 2:
-              return const ProfileView();
-            default:
-              return const SizedBox.shrink();
-          }
-        },
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        onTap: (int index) {
-          setState(() {
-            _currentPageIndex = index;
-            _pageController.animateToPage(index,
-                duration: const Duration(milliseconds: 500), curve: Curves.easeInOut);
-          });
-        },
+    return SafeArea(
+      child: Scaffold(
+        extendBody: true,
         backgroundColor: Theme.of(context).colorScheme.background,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        currentIndex: _currentPageIndex,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home, color: Colors.black),
-            label: 'Beranda',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.library_books),
-            activeIcon: Icon(Icons.library_books, color: Colors.black),
-            label: 'Peminjaman',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_2_outlined),
-            activeIcon: Icon(Icons.person_2, color: Colors.black),
-            label: 'Profil',
-          ),
-        ],
+        body: PageView.builder(
+          physics: const BouncingScrollPhysics(),
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentPageIndex = index;
+            });
+          },
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            switch (index) {
+              case 0:
+                return Scr1();
+              case 1:
+                return const PeminjamanView();
+              case 2:
+                return const ProfileView();
+              default:
+                return const SizedBox.shrink();
+            }
+          },
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          elevation: 0,
+          onTap: (int index) {
+            setState(() {
+              _currentPageIndex = index;
+              _pageController.animateToPage(index,
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeInOut);
+            });
+          },
+          backgroundColor: Theme.of(context).colorScheme.background,
+          selectedItemColor: Colors.black,
+          unselectedItemColor: Colors.grey,
+          currentIndex: _currentPageIndex,
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home, color: Colors.black),
+              label: 'Beranda',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.library_books),
+              activeIcon: Icon(Icons.library_books, color: Colors.black),
+              label: 'Peminjaman',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_2_outlined),
+              activeIcon: Icon(Icons.person_2, color: Colors.black),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,7 +112,7 @@ class Scr1 extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Get.to(() => HomeView());
+                    Get.to(() => const HomeView());
                   },
                   child: Image.asset(
                     'assets/logo_1.png',
@@ -119,7 +121,7 @@ class Scr1 extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Get.toNamed(Routes.PROFILE);
+                    Get.offAllNamed(Routes.PROFILE);
                   },
                   child: const Icon(
                     Icons.settings,
@@ -136,10 +138,13 @@ class Scr1 extends StatelessWidget {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    showSearch(context: context, delegate: BookSearch(controller: controller));
+                    showSearch(
+                        context: context,
+                        delegate: BookSearch(controller: controller));
                   },
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.white,
@@ -157,7 +162,10 @@ class Scr1 extends StatelessWidget {
                         Expanded(
                           child: Text(
                             'Cari Buku',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey, fontSize: 16),
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                                fontSize: 16),
                           ),
                         ),
                         Icon(Icons.search),
@@ -168,7 +176,6 @@ class Scr1 extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 20.0),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,7 +194,7 @@ class Scr1 extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: homeController.obx(
-                        (state) {
+                    (state) {
                       if (state == null || state.isEmpty) {
                         return const Center(
                           child: CircularProgressIndicator(),
@@ -209,61 +216,74 @@ class Scr1 extends StatelessWidget {
                         itemBuilder: (context, index) {
                           DataBook dataBook = state[index];
                           return InkWell(
-                            onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
-                            child: Container(
-                              width: 150,
-                              child: Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: Image.network(
-                                          dataBook.image!,
-                                          fit: BoxFit.cover,
+                            onTap: () =>
+                                Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+                            child: SizedBox(
+                              child: Container(
+                                width: 150,
+                                child: Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Center(
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                              child: Image.network(
+                                                dataBook.image!,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${dataBook.judul}",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "${dataBook.judul}",
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
                                             ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            "Penulis: ${dataBook.penulis}",
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.grey,
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "${dataBook.penulis}",
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           );
                         },
-                        separatorBuilder: (context, index) => const SizedBox(width: 10),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(width: 10),
                       );
                     },
-                    onLoading: const Center(child: CircularProgressIndicator()),
+                    onLoading:
+                        const Center(child: CircularProgressIndicator()),
                   ),
                 ),
               ),
@@ -285,7 +305,7 @@ class Scr1 extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(10),
                       child: homeController.obx(
-                            (state) {
+                        (state) {
                           if (state == null || state.isEmpty) {
                             return const Center(
                               child: CircularProgressIndicator(),
@@ -302,7 +322,8 @@ class Scr1 extends StatelessWidget {
                             itemBuilder: (context, index) {
                               DataBook dataBook = randomBooks[index];
                               return InkWell(
-                                onTap: () => Get.toNamed('/detail?id=${dataBook.id ?? 0}'),
+                                onTap: () => Get.toNamed(
+                                    '/detail?id=${dataBook.id ?? 0}'),
                                 child: Container(
                                   width: 150,
                                   child: Card(
@@ -311,21 +332,30 @@ class Scr1 extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10),
                                     ),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(10),
-                                            child: Image.network(
-                                              dataBook.image ?? '', // Handle null image
-                                              fit: BoxFit.cover,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Center(
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                child: Image.network(
+                                                  dataBook.image ?? '',
+                                                  // Handle null image
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Text(
                                                 "${dataBook.judul}",
@@ -336,9 +366,9 @@ class Scr1 extends StatelessWidget {
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
                                               ),
-                                              const SizedBox(height: 4),
+                                              const SizedBox(height: 1),
                                               Text(
-                                                "Penulis: ${dataBook.penulis ?? 'Unknown'}", // Handle null author
+                                                "${dataBook.penulis ?? 'Unknown'}",
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   color: Colors.grey,
@@ -353,10 +383,12 @@ class Scr1 extends StatelessWidget {
                                 ),
                               );
                             },
-                            separatorBuilder: (context, index) => const SizedBox(width: 10),
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 10),
                           );
                         },
-                        onLoading: const Center(child: CircularProgressIndicator()),
+                        onLoading:
+                            const Center(child: CircularProgressIndicator()),
                       ),
                     ),
                   ),
@@ -372,6 +404,7 @@ class Scr1 extends StatelessWidget {
 
 class BookSearch extends SearchDelegate<String> {
   final BookController controller;
+  List<DataBook> searchResults = [];
 
   BookSearch({required this.controller});
 
@@ -381,6 +414,7 @@ class BookSearch extends SearchDelegate<String> {
       IconButton(
         onPressed: () {
           query = '';
+          searchResults.clear();
         },
         icon: const Icon(Icons.clear),
       ),
@@ -399,12 +433,16 @@ class BookSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
+    if (query.isEmpty) {
+      return Container();
+    }
+
     final List<DataBook> filteredBooks = controller.state?.where((book) {
       return book.judul!.toLowerCase().contains(query.toLowerCase());
     }).toList() ?? [];
 
     if (filteredBooks.isEmpty) {
-      return Center(
+      return const Center(
         child: Text(
           "Tidak ada hasil yang ditemukan.",
           style: TextStyle(fontSize: 16),
@@ -412,77 +450,83 @@ class BookSearch extends SearchDelegate<String> {
       );
     }
 
-    return Container(
-      height: 300,
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Center( // Widget Center untuk membuat hasil di tengah
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: filteredBooks.length,
-            itemBuilder: (context, index) {
-              DataBook dataBook = filteredBooks[index];
-              return InkWell(
-                onTap: () {
-                  Get.toNamed('/detail?id=${dataBook.id ?? 0}');
+    return SingleChildScrollView(
+      child: Container(
+        height: 300, // Changed height to 300
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Center(
+            child: SizedBox(
+              height: 250, // Changed height to 250
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: filteredBooks.length,
+                itemBuilder: (context, index) {
+                  DataBook dataBook = filteredBooks[index];
+                  return InkWell(
+                    onTap: () {
+                      Get.toNamed('/detail?id=${dataBook.id ?? 0}');
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.3,
+                      margin: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Center( // Center the image horizontally and vertically
+                                child: ClipRRect(
+                                  child: Image.network(
+                                    dataBook.image!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${dataBook.judul}",
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "Penulis: ${dataBook.penulis}",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
                 },
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.7, // Lebar card
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Card(
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20), // Bentuk bulatan pada sudut
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          child: Image.network(
-                            dataBook.image!,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                          borderRadius: BorderRadius.circular(20), // Agar gambar terpotong sesuai sudut card
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${dataBook.judul}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                "Penulis: ${dataBook.penulis}",
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            },
+              ),
+            ),
           ),
         ),
       ),
     );
   }
-
 
   @override
   Widget buildSuggestions(BuildContext context) {
@@ -490,37 +534,46 @@ class BookSearch extends SearchDelegate<String> {
     final List<DataBook> suggestionList = query.isEmpty
         ? allBooks
         : allBooks.where((book) {
-      return book.judul!.toLowerCase().contains(query.toLowerCase());
-    }).toList();
+            return book.judul!.toLowerCase().contains(query.toLowerCase());
+          }).toList();
 
     return ListView.builder(
       itemCount: suggestionList.length,
       itemBuilder: (context, index) {
         DataBook dataBook = suggestionList[index];
-        return ListTile(
-          leading: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(dataBook.image ?? ''), // Gambar dari URL
-                fit: BoxFit.cover,
+        return Column(
+          children: ListTile.divideTiles(
+            context: context,
+            tiles: [
+              ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                leading: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(dataBook.image ?? ''),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                title: Text(
+                  "${dataBook.judul}",
+                  style: TextStyle(fontSize: 16.0),
+                ),
+                onTap: () {
+                  query = dataBook.judul!;
+                  showResults(context);
+                },
               ),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-          ),
-          title: Text(
-            "${dataBook.judul}",
-          ),
-          onTap: () {
-            query = dataBook.judul!;
-            showResults(context);
-          },
+            ],
+          ).toList(),
         );
       },
     );
   }
 }
-
-
-

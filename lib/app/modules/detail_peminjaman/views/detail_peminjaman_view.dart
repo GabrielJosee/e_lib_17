@@ -1,4 +1,3 @@
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -15,10 +14,25 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
 
     if (id != null) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Detail Book'),
-          centerTitle: true,
-          backgroundColor: Colors.grey.withOpacity(0.8),
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: AnimatedContainer(
+            duration: Duration(milliseconds: 500),
+            color: Colors.grey.withOpacity(0.8),
+            child: AppBar(
+              title: const Text(
+                'Detail Book',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              centerTitle: true,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+            ),
+          ),
         ),
         body: controller.obx((state) {
           DataBook? dataBook;
@@ -37,6 +51,14 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -44,14 +66,14 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
-                          flex: 1,
-                          child: Flexible(
-                            child: AspectRatio(
-                              aspectRatio: 16 / 9,
-                              child: Image.network(
-                                dataBook.image!,
-                                fit: BoxFit.cover,
-                              ),
+                          flex: 0,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: Image.network(
+                              dataBook.image!,
+                              height: 200,
+                              width: 130,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -67,16 +89,43 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                                   fontWeight: FontWeight.w900,
                                   fontSize: 25,
                                   fontFamily: 'Nunito',
+                                  color: Colors.black87,
                                 ),
                               ),
                               SizedBox(height: 20),
-                              Text("Judul : ${dataBook.judul}"),
+                              Text(
+                                "Judul : ${dataBook.judul}",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                               SizedBox(height: 8),
                               Text("Penulis : ${dataBook.penulis}"),
                               SizedBox(height: 8),
                               Text("Penerbit : ${dataBook.penerbit}"),
                               SizedBox(height: 8),
                               Text("Tahun Terbit : ${dataBook.tahunTerbit}"),
+                              SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.star,
+                                    color: Colors.yellow,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Text(
+                                    '4.5', // Ganti ini dengan nilai rating sesuai data
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
                         ),
@@ -84,43 +133,44 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+
+                SizedBox(height: 10),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 5, right: 5),
+                  padding: const EdgeInsets.only(top: 10),
                   child: LayoutBuilder(
                     builder: (context, constraints) => Container(
                       width: constraints.maxWidth,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        border: Border.all(
-                          color: Color(0xFFD9D9D9),
-                          width: 1,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10, right: 10, top: 20, bottom: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Deskripsi Buku : ',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                ExpandableText(
-                                  text: "${dataBook?.deskripsi}",
-                                ),
-                              ],
-                            ),
+                        borderRadius: BorderRadius.circular(20.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
                           ),
                         ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Deskripsi Buku : ',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            ExpandableText(
+                              text: "${dataBook?.deskripsi}",
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
