@@ -45,7 +45,7 @@ class PeminjamanController extends GetxController with StateMixin<List<DataPinja
           existingData.addAll(responsePinjam.data!);
           change(existingData, status: RxStatus.success());
           if (showSnackBar) {
-            Get.snackbar("Success", "Data telah diperbarui", backgroundColor: Colors.grey.shade300);
+            Get.snackbar("Success", "Data telah diperbarui", backgroundColor: Colors.green.shade300);
           }
         }
       } else {

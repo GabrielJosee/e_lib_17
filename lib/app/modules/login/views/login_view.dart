@@ -108,7 +108,7 @@ class LoginView extends GetView<LoginController> {
                             controller.login();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
+                            backgroundColor: Colors.blue,
                             elevation: 0.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -117,7 +117,7 @@ class LoginView extends GetView<LoginController> {
                           child: const Padding(
                             padding: EdgeInsets.symmetric(vertical: 15.0),
                             child: Text(
-                              "MASUK",
+                              "LOGIN",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
