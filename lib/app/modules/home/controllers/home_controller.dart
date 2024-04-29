@@ -1,5 +1,5 @@
-import 'package:e_lib_17_jose/app/modules/book/controllers/book_controller.dart';
-import 'package:e_lib_17_jose/app/modules/peminjaman/controllers/peminjaman_controller.dart';
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:dio/dio.dart';
 import '../../../data/constant/endpoin.dart';
@@ -10,23 +10,32 @@ class HomeController extends GetxController with StateMixin<List<DataBook>> {
   final Rx<int> selectedIndex = 0.obs;
   var isLoading = true.obs;
   final count = 0.obs;
-
   List<DataBook>? filteredBooks;
+  // Timer? _refreshTimer;
 
   @override
   void onInit() {
+    getData();  // Panggil getData() saat inisialisasi
+    // startAutoRefresh();  // Mulai auto refresh
     super.onInit();
     filteredBooks = [];
-    getData();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  // void startAutoRefresh() {
+  //   // Tentukan interval waktu untuk refresh, misalnya setiap 1 menit (60000 ms)
+  //   const duration = Duration(seconds: 1);
+  //   _refreshTimer = Timer.periodic(duration, (timer) {
+  //     getData();  // Refresh data
+  //   });
+  // }
+  //
+  // void stopAutoRefresh() {
+  //   _refreshTimer?.cancel();
+  // }
 
   @override
   void onClose() {
+    // stopAutoRefresh();
     super.onClose();
   }
 

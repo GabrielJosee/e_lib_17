@@ -21,30 +21,34 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               SizedBox(height: 20),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child:  GestureDetector(
-                      onTap: () {
-                        Get.offAllNamed(Routes.HOME);
-                      },
+                  // Gambar di kiri atas pojok
+                  GestureDetector(
+                    onTap: () {
+                      Get.offAllNamed(Routes.HOME);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 10), // Padding kiri
                       child: Image.asset(
                         'assets/logo_1.png',
                         width: 70,
                       ),
                     ),
                   ),
+                  // Teks di tengah
                   Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 7.0),
                       child: Text(
                         "Hallo, ${controller.username.value}",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 17,
-                          fontStyle: FontStyle.normal,
+                          fontSize: 18,
+                          color: Colors.black, // Mengatur warna teks menjadi hitam
+                          letterSpacing: 1.2,
                         ),
+                        textAlign: TextAlign.center, // Membuat teks berada di tengah
                       ),
                     ),
                   ),
@@ -73,24 +77,6 @@ class ProfileView extends GetView<ProfileController> {
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.black,
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          // Add functionality for changing profile picture
-                        },
-                        icon: Icon(Icons.camera_alt, color: Colors.white),
-                      ),
-                    ),
-                  ),
                 ],
               ),
               SizedBox(height: 20),
@@ -105,6 +91,48 @@ class ProfileView extends GetView<ProfileController> {
                 child: Text("Edit Profile"),
               ),
               SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  // Get.offAllNamed(Routes.DISUKAI);
+                },
+                child: ListTile(
+                  leading: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                    child: const Icon(Icons.bookmark_add_rounded),
+                  ),
+                  title: Text(
+                    "Disukai",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  // Get.toNamed(Routes.RIWAYAT_PINJAM);
+                },
+                child: ListTile(
+                  leading: Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                    child: const Icon(Icons.menu_book_sharp),
+                  ),
+                  title: Text(
+                    "Riwayat Peminjaman",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  trailing: Icon(Icons.chevron_right),
+                ),
+              ),
               InkWell(
                 onTap: () {
                   showLogoutConfirmationDialog(context);

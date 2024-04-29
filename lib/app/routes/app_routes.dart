@@ -15,6 +15,9 @@ abstract class Routes {
   static const EDIT_PROFILE = _Paths.EDIT_PROFILE;
   static const RATING = _Paths.RATING;
   static const USER = _Paths.USER;
+  static const DISUKAI = _Paths.DISUKAI;
+  static const RIWAYAT_PINJAM = _Paths.RIWAYAT_PINJAM;
+  static const PENGEMBALIAN = _Paths.PENGEMBALIAN;
 }
 
 abstract class _Paths {
@@ -32,4 +35,7 @@ abstract class _Paths {
   static const EDIT_PROFILE = '/edit-profile';
   static const RATING = '/rating';
   static const USER = '/user';
+  static const DISUKAI = '/disukai';
+  static const RIWAYAT_PINJAM = '/riwayat-pinjam';
+  static const PENGEMBALIAN = '/pengembalian';
 }

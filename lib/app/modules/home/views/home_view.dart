@@ -41,8 +41,13 @@ class _HomeViewStfulState extends State<HomeViewStful> {
           onPageChanged: (index) {
             setState(() {
               _currentPageIndex = index;
+              if (_currentPageIndex == 0) {
+                HomeController homeController = Get.find<HomeController>();
+                homeController.getData();
+              }
             });
           },
+
           itemCount: 3,
           itemBuilder: (context, index) {
             switch (index) {

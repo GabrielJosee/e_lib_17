@@ -8,6 +8,8 @@ import '../modules/detail/bindings/detail_binding.dart';
 import '../modules/detail/views/detail_view.dart';
 import '../modules/detail_peminjaman/bindings/detail_peminjaman_binding.dart';
 import '../modules/detail_peminjaman/views/detail_peminjaman_view.dart';
+import '../modules/disukai/bindings/disukai_binding.dart';
+import '../modules/disukai/views/disukai_view.dart';
 import '../modules/edit_profile/bindings/edit_profile_binding.dart';
 import '../modules/edit_profile/views/edit_profile_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -16,12 +18,16 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/peminjaman/bindings/peminjaman_binding.dart';
 import '../modules/peminjaman/views/peminjaman_view.dart';
+import '../modules/pengembalian/bindings/pengembalian_binding.dart';
+import '../modules/pengembalian/views/pengembalian_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 import '../modules/rating/bindings/rating_binding.dart';
 import '../modules/rating/views/rating_view.dart';
 import '../modules/register/bindings/register_binding.dart';
 import '../modules/register/views/register_view.dart';
+import '../modules/riwayat_pinjam/bindings/riwayat_pinjam_binding.dart';
+import '../modules/riwayat_pinjam/views/riwayat_pinjam_view.dart';
 import '../modules/splash/bindings/splash_binding.dart';
 import '../modules/splash/views/splash_view.dart';
 
@@ -92,6 +98,21 @@ class AppPages {
       name: _Paths.RATING,
       page: () => const RatingView(),
       binding: RatingBinding(),
+    ),
+    GetPage(
+      name: _Paths.DISUKAI,
+      page: () => const DisukaiView(),
+      binding: DisukaiBinding(),
+    ),
+    GetPage(
+      name: _Paths.RIWAYAT_PINJAM,
+      page: () => const RiwayatPinjamView(),
+      binding: RiwayatPinjamBinding(),
+    ),
+    GetPage(
+      name: _Paths.PENGEMBALIAN,
+      page: () => const PengembalianView(),
+      binding: PengembalianBinding(),
     ),
   ];
 }

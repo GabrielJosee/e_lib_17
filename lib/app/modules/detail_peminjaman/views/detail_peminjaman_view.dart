@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/model/response_book.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/detail_peminjaman_controller.dart';
 
 class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
@@ -180,22 +181,8 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                 ElevatedButton(
                   onPressed: () {
                     if (dataBook != null) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text("Error"),
-                            content: Text("Anda sedang meminjam buku ini."),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("OK"),
-                              ),
-                            ],
-                          );
-                        },
+                      Get.toNamed(
+                        Routes.PENGEMBALIAN
                       );
                     }
                   },
@@ -219,12 +206,12 @@ class DetailPeminjamanView extends GetView<DetailPeminjamanController> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(
-                              Icons.shopping_cart,
+                              Icons.shopify_outlined,
                               color: Colors.blue,
                             ),
                             SizedBox(width: 5),
                             Text(
-                              "Pinjam",
+                              "Kembalikan ",
                               style: TextStyle(color: Colors.blue),
                             ),
                           ],
